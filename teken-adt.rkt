@@ -130,7 +130,6 @@
     (define (redraw-aliens alienlijst)
       (if (not (null? alienlijst))
         (begin
-             ;Zorgt dat dode aliens niet hertekend worden
             ((alien-laag 'add-drawable) (cdar alienlijst))
             (redraw-aliens (cdr alienlijst))) ;zorgt voor de iteratie
           'ok))

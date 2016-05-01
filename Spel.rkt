@@ -55,7 +55,6 @@
     (pauze!)
     ((teken-adt 'reset-vloot!))
     ((vloot-adt 'verwijder-vloot!))
-
     ((vloot-adt 'maak-aliens!) 24 0)
 
     ;Momenteel geen tijd op een oplossing te vinden om het spel te herstarten. Waarschijnlijk gaat dit het beste door de start functie op te splitsen zodat enkel de deze opnieuwe opgeroepen kan worden.
@@ -80,7 +79,7 @@
               (begin
                 ((menu-adt 'staat!) 'play)
                 ((menu-adt 'delete!) teken-adt)
-                ((teken-adt 'herteken-alles!) );(vloot-adt 'vloot))
+                ((teken-adt 'herteken-alles!))
                 ((teken-adt 'set-toets-functie!) toets-naar-spel-play))
                 ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-play))
              ((= 1 (rotator-adt 'staat))
@@ -104,7 +103,7 @@
              ((menu-adt 'staat!) 'pauze)
              ((teken-adt 'delete-how-to!))
              ((teken-adt 'maak-rotator))
-             ((teken-adt 'verwijder-alles)(vloot-adt 'vloot)(kogels-adt 'kogels))
+             ((teken-adt 'verwijder-alles))
              ((teken-adt 'set-toets-functie!) toets-naar-spel-pauze)
              ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-pauze)))
           ))
