@@ -38,7 +38,7 @@
   (define rotator-adt (maak-rotator-adt))
   (define how-to-adt (maak-how-to-adt))
   (define score-adt (maak-score-adt))
-  (define Power-up-adt (maak-power-up-adt 0.5 0.5 teken-adt))
+  (define Power-up-adt (maak-power-up-adt (/ (random 1 11) 10) (/ (random 5 11) 10) teken-adt))
 
 
 
