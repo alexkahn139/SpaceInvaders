@@ -31,7 +31,7 @@
     (set! positie-y nieuwe-y))
   ;Om de objecten te tekenen of te verwijderen
   (define (teken! teken-adt)
-    ((teken-adt 'teken-power-up!) dispatch-power-up)
+    ((teken-adt 'teken-power-up!) dispatch-power-up kleur)
     )
   (define (delete! teken-adt)
     ((teken-adt 'delete-power-up!))
@@ -45,11 +45,11 @@
 
   (define (geraakt! kogel-adt teken-adt vloot-adt score-adt kogels-adt huidige-tijd)
     (cond
-      ((eq? kleur 'geel)
+      ((eq? kleur "yellow")
        ((vloot-adt 'stop!)))
-      ((eq? kleur 'rood)
+      ((eq? kleur "red")
        ((kogels-adt 'volgende-kogel!) 'speciaal))
-      ((eq? kleur 'wit)
+      ((eq? kleur "red")
        ((vloot-adt 'versnel!) 2)))
     (set! timer huidige-tijd)
     (set! staat 'bezig)
@@ -59,13 +59,13 @@
 (define id (random 1 4))
 (define kleur '())
 (define (zoek-kleur)
-  (cond ((= id 1) (set! kleur 'geel))
-        ((= id 2) (set! kleur 'wit))
-        ((= id 3) (set! kleur 'rood))))
+  (cond ((= id 1) (set! kleur "yellow"))
+        ((= id 2) (set! kleur "white"))
+        ((= id 3) (set! kleur "red"))))
 
 (define (activeer!)
   (zoek-kleur)
-  ((teken-adt 'maak-power-up-tile) kleur)
+  ;((teken-adt 'maak-power-up-tile) kleur)
   (set! staat 'actief)
   ;(set! random-nummer (+ random-nummer (random 1 10000)))
 
@@ -74,11 +74,11 @@
   (set! staat 'inactief))
 (define (zet-terug! vloot-adt kogels-adt)
   (cond
-    ((eq? kleur 'geel)
+    ((eq? kleur "yellow")
      ((vloot-adt 'herstart!)))
-    ((eq? kleur 'rood)
+    ((eq? kleur "red")
      ((kogels-adt 'volgende-kogel!) 'normaal))
-    ((eq? kleur 'wit)
+    ((eq? kleur "white")
      (vloot-adt 'versnel!) 0.5))
   (reset!))
 

@@ -100,8 +100,6 @@
         (set! kogel-obj (make-bitmap-tile "kogel.jpg"))
         (set! kogel-obj (make-bitmap-tile "kogel-groen.jpg")))
     (set! kogel-tiles (cons (cons kogel-adt kogel-obj) kogel-tiles))
-
-      ;(map (lambda (kogel-tile) ((kogel-laag 'add-drawable) (cdr kogel-tile))) kogel-tiles)
       ((kogel-laag 'add-drawable) kogel-obj)
       )
 
@@ -130,7 +128,7 @@
     (define (redraw-aliens alienlijst)
       (if (not (null? alienlijst))
         (begin
-            ((alien-laag 'add-drawable) (cdar alienlijst))
+            ((alien-laag 'add-drawable) (cdar alienlijst)) ;neemt enkel de tiles, want bestaat uit dubbele cons
             (redraw-aliens (cdr alienlijst))) ;zorgt voor de iteratie
           'ok))
     (redraw-aliens vloot-tiles))
@@ -192,8 +190,9 @@
 
   ; #TODO config voor Power-Ups
   (define Power-Up-laag (venster 'make-layer))
-  (define Power-Up-tile '())
-  (define (maak-power-up-tile kleur)
+  (define Power-Up-tile (make-tile h-pixels v-pixels))
+  ((Power-Up-laag 'add-drawable) Power-Up-tile)
+  #|(define (maak-power-up-tile kleur)
     (define tile '())
     (cond
       ((eq? kleur 'geel)
@@ -203,7 +202,7 @@
       ((eq? kleur 'rood)
        (set! tile (make-bitmap-tile "PowerUpRood.jpg"))))
     (set! Power-Up-tile tile)
-    ((Power-Up-laag 'add-drawable) Power-Up-tile))
+    ((Power-Up-laag 'add-drawable) Power-Up-tile))|#
   (define (delete-power-up!)
     ((Power-Up-laag 'remove-drawable) Power-Up-tile)
     ;(set! Power-Up-tile '())
@@ -310,18 +309,15 @@
                                  "green")))
 
 ;TODO Tekenfunctie voor Power-Ups
-(define (teken-Power-UP! Power-Up-adt)
-  (if (not (null? Power-Up-tile))
-      (begin
+(define (teken-Power-UP! Power-Up-adt kleur)
         (let* ((Power-Up-x (* h-pixels (Power-Up-adt 'x)))
                (Power-Up-y (* v-pixels (Power-Up-adt 'y)))
                ;(absolute-x (centraliseer Power-Up-x 'Power-up))
                )
-          ((Power-Up-tile 'set-x!) Power-Up-x)
-          ((Power-Up-tile 'set-y!)  Power-Up-y)
+          (Power-Up-tile 'clear)
+          ((Power-Up-tile 'draw-ellipse) Power-Up-x Power-Up-y px-alien-hoogte px-alien-breedte kleur)
           )
         )
-      'ok))
 
 
   ;;;;;;;;;;;;;;;;;;;;;
@@ -356,7 +352,7 @@
           ((eq? msg 'nieuwe-alien!) voeg-alien-toe!)
           ((eq? msg 'nieuwe-kogel!) maak-kogel!)
           ((eq? msg 'maak-rotator) maak-rotator)
-          ((eq? msg 'maak-power-up-tile) maak-power-up-tile)
+          ;((eq? msg 'maak-power-up-tile) maak-power-up-tile)
           ((eq? msg 'maak-how-to) maak-how-to)
           ((eq? msg 'delete-alien!) verwijder-alien!)
           ((eq? msg 'delete-kogel!) verwijder-kogel!)
