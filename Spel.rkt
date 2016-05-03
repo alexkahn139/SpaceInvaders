@@ -56,10 +56,26 @@
     ((teken-adt 'reset-vloot!))
     ((vloot-adt 'verwijder-vloot!))
     ((vloot-adt 'maak-aliens!) 24 0)
+    (pauze!))
+
+  (define (play)
+    ((teken-adt 'herteken-alles!))
+    ((menu-adt 'staat!) 'play)
+    ((menu-adt 'delete!) teken-adt)
+    ((teken-adt 'set-toets-functie!) toets-naar-spel-play)
+    ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-play))
+
+    (define (howto)
+      ((menu-adt 'delete!) teken-adt)
+      ((menu-adt 'staat!) 'howto)
+      ((teken-adt 'maak-how-to))
+      ((teken-adt 'set-toets-functie!) toets-naar-spel-howto)
+      ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-howto)
+      )
 
     ;Momenteel geen tijd op een oplossing te vinden om het spel te herstarten. Waarschijnlijk gaat dit het beste door de start functie op te splitsen zodat enkel de deze opnieuwe opgeroepen kan worden.
     ;vloot-adt 'verwijder-vloot!))
-    )  ;spellus
+     ;spellus
   ;Leest de toetsenbordinput uit en stuurt dit door naar het spel.
   ;Afhankelijk van de staat van het spel
   (define (toets-naar-spel-play toets)
@@ -72,24 +88,13 @@
        ((kogels-adt 'maak-kogel!) (schip-adt 'x) teken-adt))
       ((eq? toets #\p)
        (pauze!))))
-  (define (toets-naar-spel-pauze toets)
+  (define (toets-naar-spel-pauze toets); pas menu-tekenen na move
     (cond
       ((eq? toets #\return)
        (cond ((= 0 (rotator-adt 'staat))
-              (begin
-                ((menu-adt 'staat!) 'play)
-                ((menu-adt 'delete!) teken-adt)
-                ((teken-adt 'herteken-alles!))
-                ((teken-adt 'set-toets-functie!) toets-naar-spel-play))
-                ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-play))
+              (play))
              ((= 1 (rotator-adt 'staat))
-              (begin
-                ((menu-adt 'delete!) teken-adt)
-                ((menu-adt 'staat!) 'howto)
-                ((teken-adt 'maak-how-to))
-                ((teken-adt 'set-toets-functie!) toets-naar-spel-howto)
-                ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-howto)
-                ))
+              (howto))
              ((= 2 (rotator-adt 'staat))
               (exit))))
       ((eq? toets 'up)
@@ -106,6 +111,7 @@
              ((teken-adt 'verwijder-alles))
              ((teken-adt 'set-toets-functie!) toets-naar-spel-pauze)
              ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-pauze)))
+
           ))
 
 
@@ -130,7 +136,7 @@
                ;(display (length (kogels-adt 'kogels))) (newline)
                ((score-adt 'teken!) teken-adt)
                (if (eq? 'actief (Power-up-adt 'staat)) ;als het al actief is, moet het getekend worden, of na 5s van het scherm verdwijnen
-                   (if (< spel-tijd (+ 5000 (Power-up-adt 'random-nummer)))
+                   (if (< spel-tijd (+ timer5s (Power-up-adt 'random-nummer)))
                        ((Power-up-adt 'teken!) teken-adt)
                        (begin ((Power-up-adt 'delete!) teken-adt)
                               ((Power-up-adt 'reset!))))
@@ -139,7 +145,7 @@
                        'ok)
                    )
                 (if (and (eq? 'bezig (Power-up-adt 'staat))
-                         (> spel-tijd (+ 5000 (Power-up-adt 'timer))))
+                         (> spel-tijd (+ timer5s (Power-up-adt 'timer))))
                     ((Power-up-adt 'zet-terug!) vloot-adt kogels-adt)
                     'ok); met de timer zien of het groter is
                 )

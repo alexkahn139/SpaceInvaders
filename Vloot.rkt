@@ -25,8 +25,8 @@
   ;Dit maakt een lege vloot aan in de vorm van een lijst.
   (define vloot '())
   (define richting-vloot 'rechts)
-  (define horizon-snelheid 0.001)
-  (define vert-snelheid 0.1)
+  (define horizon-snelheid 0.002)
+  (define vert-snelheid 0.2)
   (define afstand-tussen-2 0)
 
   ;maak-aliens! maakt aliens aan, deze zullen dan een positie en dergelijke hebben, met maximaal 10 per rij. en worden in een lijst opgeslagen.

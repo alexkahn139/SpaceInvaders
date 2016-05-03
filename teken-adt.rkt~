@@ -29,14 +29,8 @@
   ;;;;;;;;;;
   ;;CONFIG;;
   ;;;;;;;;;;
-  (define (redraw-all! lijst laag)
-  (map (lambda (pair) ;neemt een assoclijst zoals de alien-tiles
-     ((laag 'add-drawable) (cdr pair)))
-   lijst))
-(define (verwijder-alle! lijst laag)
-(map (lambda (pair) ;neemt een assoclijst zoals de alien-tiles
-   ((laag 'remove-drawable) (cdr pair)))
- lijst))
+
+
   ;;;;;;;;;;;;;;;;;;;;;;;
   ;; Config voor alien ;;
   ;;;;;;;;;;;;;;;;;;;;;;;
@@ -69,8 +63,7 @@
       ((alien-laag 'remove-drawable) alien-tile))
     (set! vloot-tiles (remove alien-adt vloot-tiles (lambda (r e) (eq? (car e) e)))))
   (define (reset-vloot!)
-    (set! vloot-tiles '())
-    (verwijder-alle! vloot-tiles alien-laag))
+    (set! vloot-tiles '()))
 
 
   ;;;;;;;;;;;;;;;;;;;;;
@@ -84,8 +77,7 @@
   (define schip-tile (make-bitmap-tile "schip.jpg" "schip-mask.jpg"))
 
   ;;; Zorgt ervoor dat het schip getekend kan worden. Moet niet te deleten zijn.
-  (define (maak-schip!)
-    ((schip-laag 'add-drawable) schip-tile))
+  ((schip-laag 'add-drawable) schip-tile)
 
   ;verwijderen van het schip
   (define (verwijder-schip!)
@@ -108,8 +100,8 @@
         (set! kogel-obj (make-bitmap-tile "kogel.jpg"))
         (set! kogel-obj (make-bitmap-tile "kogel-groen.jpg")))
     (set! kogel-tiles (cons (cons kogel-adt kogel-obj) kogel-tiles))
-    ((kogel-laag 'add-drawable) kogel-obj)
-    )
+      ((kogel-laag 'add-drawable) kogel-obj)
+      )
 
   ; Functie om een getekende kogel te verwijderen
   (define (verwijder-kogel! kogel-adt)
@@ -129,17 +121,22 @@
   (define (verwijder-menu!)
     ((rotator-laag 'remove-drawable) rotator-tile)
     ((menu-laag 'remove-drawable) menu-tile)
-    (display "verwijder menu")
-    )
+    (display "verwijder menu"))
 
   ;Functie om alles wat weggehaald wordt bij het aanmaken van een menu te hertekenen.
   (define (herteken-alles!)
-    (maak-schip!)
-    (redraw-all! vloot-tiles alien-laag))
+    ((schip-laag 'add-drawable) schip-tile)
+    (define (redraw-aliens alienlijst)
+      (if (not (null? alienlijst))
+        (begin
+            ((alien-laag 'add-drawable) (cdar alienlijst)) ;neemt enkel de tiles, want bestaat uit dubbele cons
+            (redraw-aliens (cdr alienlijst))) ;zorgt voor de iteratie
+          'ok))
+    (redraw-aliens vloot-tiles))
 
   ;Functie om alles weg te halen bij het aanmaken van het menu. Zorgt ervoor dat dit ook al spelende kan gebeuren.
   (define (verwijder-alles!)
-    #|(define (verwijder-alle-kogels kogellijst) ;delete alle kogels
+    (define (verwijder-alle-kogels kogellijst) ;delete alle kogels
       (if (not (null? kogellijst))
           (begin
             ((kogel-laag 'remove-drawable) (cdar kogellijst))
@@ -150,12 +147,11 @@
           (begin
             ((alien-laag 'remove-drawable) (cdar alienlijst))
             (verwijder-alle-aliens (cdr alienlijst)))
-          'ok))|#
-    (verwijder-alle! vloot-tiles alien-laag)
-    (verwijder-alle! kogel-tiles kogel-laag)
+          'ok))
+    (verwijder-alle-aliens vloot-tiles)
+    (verwijder-alle-kogels kogel-tiles)
     (verwijder-schip!)
-    ((menu-laag 'add-drawable) menu-tile)
-    ) ;tekent het menu
+    ((menu-laag 'add-drawable) menu-tile)) ;tekent het menu
 
   ;;;;;;;;;;;;;;;;;;;;;;;
   ;;Config voor rotator;;
@@ -197,9 +193,21 @@
   (define Power-Up-laag (venster 'make-layer))
   (define Power-Up-tile (make-tile h-pixels v-pixels))
   ((Power-Up-laag 'add-drawable) Power-Up-tile)
-
+  #|(define (maak-power-up-tile kleur)
+    (define tile '())
+    (cond
+      ((eq? kleur 'geel)
+       (set! tile (make-bitmap-tile "PowerUpGeel.jpg")))
+      ((eq? kleur 'wit)
+        (set! tile (make-bitmap-tile "PowerUpWit.jpg")))
+      ((eq? kleur 'rood)
+       (set! tile (make-bitmap-tile "PowerUpRood.jpg"))))
+    (set! Power-Up-tile tile)
+    ((Power-Up-laag 'add-drawable) Power-Up-tile))|#
   (define (delete-power-up!)
-    ((Power-Up-laag 'remove-drawable) Power-Up-tile))
+    ((Power-Up-laag 'remove-drawable) Power-Up-tile)
+    ;(set! Power-Up-tile '())
+    )
   ;;;;;;;;;;;;;;;;;;
   ;;TEKEN FUNCTIES;;
   ;;;;;;;;;;;;;;;;;;
@@ -294,23 +302,23 @@
            (string (string-append "score: "(number->string (score-adt 'score))))
 
            )
-      (score-tile 'clear)
-      ((score-tile 'draw-text) string
-                               20
-                               score-x
-                               score-y
-                               "green")))
+        (score-tile 'clear)
+        ((score-tile 'draw-text) string
+                                 20
+                                 score-x
+                                 score-y
+                                 "green")))
 
-  ;TODO Tekenfunctie voor Power-Ups
-  (define (teken-Power-UP! Power-Up-adt kleur)
-    (let* ((Power-Up-x (* h-pixels (Power-Up-adt 'x)))
-           (Power-Up-y (* v-pixels (Power-Up-adt 'y)))
-           ;(absolute-x (centraliseer Power-Up-x 'Power-up))
-           )
-      (Power-Up-tile 'clear)
-      ((Power-Up-tile 'draw-ellipse) Power-Up-x Power-Up-y px-alien-hoogte px-alien-breedte kleur)
-      )
-    )
+;TODO Tekenfunctie voor Power-Ups
+(define (teken-Power-UP! Power-Up-adt kleur)
+        (let* ((Power-Up-x (* h-pixels (Power-Up-adt 'x)))
+               (Power-Up-y (* v-pixels (Power-Up-adt 'y)))
+               ;(absolute-x (centraliseer Power-Up-x 'Power-up))
+               )
+          (Power-Up-tile 'clear)
+          ((Power-Up-tile 'draw-ellipse) Power-Up-x Power-Up-y px-alien-hoogte px-alien-breedte kleur)
+          )
+        )
 
 
   ;;;;;;;;;;;;;;;;;;;;;

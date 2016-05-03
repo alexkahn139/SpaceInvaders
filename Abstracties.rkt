@@ -30,7 +30,8 @@
          decrement
          binnen-grenzen?
          check-geraakt?
-         centraliseer)
+         centraliseer
+         timer5s)
 
 ;Speelvenster
 (define venster-breedte 1)
@@ -97,3 +98,4 @@
         ((eq? type 'rotator) (- positie (helft px-rotator-breedte)))
         ((eq? type 'how-to) (- positie (helft px-how-to-breedte)))
         ))
+(define timer5s 5000)
