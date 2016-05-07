@@ -55,7 +55,8 @@
           ((eq? 'groen (alien-adt 'kleur))
            (set! kleurfoto (make-bitmap-tile "monster-groen.jpg"))))
     (set! vloot-tiles (cons (cons alien-adt kleurfoto) vloot-tiles))
-    ((alien-laag 'add-drawable) kleurfoto))
+    ;((alien-laag 'add-drawable) kleurfoto)
+    )
 
   ;;; Functie om de correcte alien of kogel uit de lijst te halen.
   (define (neem-iets iets-adt uit-tiles)
@@ -135,26 +136,18 @@
   ;Functie om alles wat weggehaald wordt bij het aanmaken van een menu te hertekenen.
   (define (herteken-alles!)
     (maak-schip!)
-    (redraw-all! vloot-tiles alien-laag))
+    (verwijder-menu!)
+    (redraw-all! vloot-tiles alien-laag)
+    ;(verwijder-menu!)
+    (display "alles ok"))
 
   ;Functie om alles weg te halen bij het aanmaken van het menu. Zorgt ervoor dat dit ook al spelende kan gebeuren.
   (define (verwijder-alles!)
-    #|(define (verwijder-alle-kogels kogellijst) ;delete alle kogels
-      (if (not (null? kogellijst))
-          (begin
-            ((kogel-laag 'remove-drawable) (cdar kogellijst))
-            (verwijder-alle-kogels (cdr kogellijst)))
-          'ok))
-    (define (verwijder-alle-aliens alienlijst) ;delete alle aliens
-      (if (not (null? alienlijst))
-          (begin
-            ((alien-laag 'remove-drawable) (cdar alienlijst))
-            (verwijder-alle-aliens (cdr alienlijst)))
-          'ok))|#
+    ((menu-laag 'add-drawable) menu-tile)
     (verwijder-alle! vloot-tiles alien-laag)
     (verwijder-alle! kogel-tiles kogel-laag)
     (verwijder-schip!)
-    ((menu-laag 'add-drawable) menu-tile)
+
     ) ;tekent het menu
 
   ;;;;;;;;;;;;;;;;;;;;;;;

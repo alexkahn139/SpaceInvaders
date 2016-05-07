@@ -18,7 +18,7 @@
 (require "teken-adt.rkt")
 (require "Abstracties.rkt")
 
-(define (maak-alien-adt positie-x positie-y kleur)
+(define (maak-alien-adt positie-x positie-y kleur teken-adt)
   (define levens 0)
   (cond ((eq? kleur 'geel)
          (set! levens 1))
@@ -52,6 +52,7 @@
          'ok))
   (define (levens! getal)
     (set! levens getal))
+
   ;Dispatch er met dit object geïnterageerd kan worden.
   (define (dispatch-alien msg)
     (cond

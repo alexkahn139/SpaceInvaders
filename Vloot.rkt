@@ -19,7 +19,7 @@
 ;;;;;;;;;;;;;
 ;Het vloot-adt zal in een lijst alle aliens bijhouden. Ook zal dit ervoor zorgen dat bepaalde functies op alle aliens toegepast kunnen worden.
 
-(define (maak-vloot-adt aantal teken-adt)
+(define (maak-vloot-adt teken-adt)
   ;De (+ aantal 1) is om te zorgen dat ze mooi gecentreerd staan
   ;(define afstand-tussen-2 0)
   ;Dit maakt een lege vloot aan in de vorm van een lijst.
@@ -34,9 +34,10 @@
   (define (maak-aliens! aantal pos-y)
     (define (maak-rij-aliens! teller pos-x pos-y aantal-op-rij kleur)
       (if (< teller aantal-op-rij)
-          (begin  (let* ((nieuwe-alien (maak-alien-adt pos-x pos-y kleur)))
+          (begin  (let* ((nieuwe-alien (maak-alien-adt pos-x pos-y kleur teken-adt)))
                     (set! vloot (cons nieuwe-alien vloot))
-                    ((teken-adt 'nieuwe-alien!) nieuwe-alien))
+                    ((teken-adt 'nieuwe-alien!) nieuwe-alien)
+                    )
                   (maak-rij-aliens! (+ teller 1) (- pos-x afstand-tussen-2) pos-y aantal-op-rij kleur))
           'ok))
     (if (> aantal 10)
@@ -46,7 +47,8 @@
           (maak-aliens! (- aantal 10) (+ pos-y 0.1)))
         (begin
           (set! afstand-tussen-2 (/ venster-breedte aantal))
-          (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal 'geel))))
+          (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal 'geel)))
+    )
   ;Zorgt ervoor dat voor elke alien oproept om zichzelf te tekenen
   (define (teken! teken-adt)
     (for-each (lambda (alien-adt)
@@ -61,6 +63,7 @@
     (for-each (lambda (alien-adt)
                 ((alien-adt 'delete!) teken-adt))
               vloot))
+
 
   (define (verwijder-vloot!)
     (set! vloot '()))
@@ -104,7 +107,7 @@
               (delete-loop (cdr lijst) (cons (car lijst) reslijst)))
           (set! vloot (reverse reslijst))))
     (delete-loop vloot '()))
-  (maak-aliens! aantal 0)
+  ;(maak-aliens! aantal 0)
   (define (versnel! factor) ;versnelling kan ook negatief zijn
         (set! horizon-snelheid (* horizon-snelheid factor)))
  ;Zo kan dezelfde functie gebruikt worden om zowel de witte power-up te starten als de gele te stoppen
