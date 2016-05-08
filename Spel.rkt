@@ -40,7 +40,7 @@
   (define score-adt (maak-score-adt))
   (define Power-up-adt (maak-power-up-adt (/ (random 1 10) 10) (/ (random 5 10) 10) teken-adt))
   (define level 1)
-  (define begin-aliens 24)
+  (define begin-aliens 10)
   (define spel-tijd 0)
 
   (define (pauze!)
@@ -57,6 +57,7 @@
     ((teken-adt 'reset-vloot!))
     ((vloot-adt 'verwijder-vloot!))
     ((vloot-adt 'maak-aliens!) begin-aliens 0)
+    (set! level 1)
     ;(pauze!)
     ;((teken-adt 'delete-menu!))
     )
@@ -77,9 +78,13 @@
     ((teken-adt 'teken-how-to!) how-to-adt)
     ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-howto)
     )
-  (define (new-level!)
+  (define (nieuw-level!)
     (set! level (+ level 1))
-    ((vloot-adt 'maak-aliens (+ begin-aliens (floor (/ (* level begin-aliens) 3)))))
+    ((vloot-adt 'maak-aliens!) (+ begin-aliens (floor (/ (* level begin-aliens) 2))) 0)
+    ;((vloot-adt 'maak-aliens!) begin-aliens 0)
+    ((vloot-adt 'maak-alien-tiles!))
+    ;((teken-adt 'herteken-alles!))
+    ;((teken-adt  'herteken-alles!))
     )
 
   ;Momenteel geen tijd op een oplossing te vinden om het spel te herstarten. Waarschijnlijk gaat dit het beste door de start functie op te splitsen zodat enkel de deze opnieuwe opgeroepen kan worden.
@@ -141,7 +146,7 @@
     ((vloot-adt 'teken!) teken-adt)
     ((vloot-adt 'beweeg!) dispatch-spel)
     ;Indien de kogel afgeschoten is wordt de collision detection gedaan. Is performanter op deze manier, anders moet er elke beurt voor elke alien gecheckt worden.
-    ((kogels-adt 'beweeg!) teken-adt vloot-adt score-adt Power-up-adt spel-tijd)
+    ((kogels-adt 'beweeg!) teken-adt vloot-adt score-adt Power-up-adt spel-tijd dispatch-spel)
     ((kogels-adt 'teken!) teken-adt)
     ((score-adt 'teken!) teken-adt)
     (if (eq? 'actief (Power-up-adt 'staat)) ;als het al actief is, moet het getekend worden, of na 5s van het scherm verdwijnen
@@ -177,6 +182,7 @@
       ((eq? msg 'start) start)
       ((eq? msg 'pauze!) pauze!)
       ((eq? msg 'restart!) restart!)
+      ((eq? msg 'nieuw-level!) nieuw-level!)
       ))
   dispatch-spel)
 

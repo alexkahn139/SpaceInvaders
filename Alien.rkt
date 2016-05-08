@@ -38,7 +38,7 @@
   ;Loop van wat er moet gebeuren als een alien geraakt is.
   ;De kogel moet gedelete worden, zodat deze niet op het scherm blijft.
   ;De alien moet indien hij geen levens meer heeft ook gedeletet worden.
-  (define (geraakt! kogel teken-adt vloot-adt score-adt kogels-adt huidige-tijd)
+  (define (geraakt! kogel teken-adt vloot-adt score-adt kogels-adt huidige-tijd spel)
     (teken-adt 'delete-kogel!)
     ((score-adt 'verhoog!) 10)
     (cond ((eq? 'normaal (kogel 'type))
@@ -48,7 +48,7 @@
     (if (>= 0 levens)
         (begin
          (delete! teken-adt)
-         ((vloot-adt 'delete-dode-aliens)))
+         ((vloot-adt 'delete-dode-aliens) spel))
          'ok))
   (define (levens! getal)
     (set! levens getal))

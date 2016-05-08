@@ -26,9 +26,9 @@
   (define vloot '())
   (define richting-vloot 'rechts)
   (define horizon-snelheid 0.002)
-  (define vert-snelheid 0.2)
+  (define vert-snelheid 0.02)
   (define afstand-tussen-2 0)
-
+  (define aantal-per-rij 14)
   ;maak-aliens! maakt aliens aan, deze zullen dan een positie en dergelijke hebben, met maximaal 10 per rij. en worden in een lijst opgeslagen.
   ;het teken-adt wordt ook aangesproken om daar de nieuwe alien-tiles aan te maken
   (define (maak-aliens! aantal pos-y)
@@ -40,11 +40,12 @@
                     )
                   (maak-rij-aliens! (+ teller 1) (- pos-x afstand-tussen-2) pos-y aantal-op-rij kleur))
           'ok))
-    (if (> aantal 10)
+    (if (> aantal aantal-per-rij)
         (begin
-          (set! afstand-tussen-2 (/ venster-breedte 10))
-          (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y 10 'groen)
-          (maak-aliens! (- aantal 10) (+ pos-y 0.1)))
+          (set! afstand-tussen-2 (/ venster-breedte aantal-per-rij))
+          (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal-per-rij
+           'groen)
+          (maak-aliens! (- aantal aantal-per-rij) (+ pos-y 0.1)))
         (begin
           (set! afstand-tussen-2 (/ venster-breedte aantal))
           (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal 'geel)))
@@ -64,7 +65,10 @@
                 ((alien-adt 'delete!) teken-adt))
               vloot))
 
-
+              (define (maak-alien-tiles!)
+                (for-each (lambda (alien-adt)
+                            ((teken-adt 'voeg-alien-tile-toe!) alien-adt))
+                          vloot))
   (define (verwijder-vloot!)
     (set! vloot '()))
 
@@ -81,7 +85,7 @@
                       (x (alien-adt 'x)))
                   (if (< y 1)
                       (begin
-                        ;(delete-dode-aliens)
+                        ;(delete-dode-aliens spel)
                         (cond
                           ((eq? richting-vloot 'links) (if  (< 0 x)
                                                             ((alien-adt 'x!) (decrement x horizon-snelheid))
@@ -99,15 +103,19 @@
                       ((spel 'restart!)))))
               vloot))
 
-  (define (delete-dode-aliens)
+  (define (delete-dode-aliens spel)
     (define (delete-loop lijst reslijst)
       (if (not (null? lijst))
           (if (= ((car lijst) 'levens) 0)
               (delete-loop (cdr lijst) reslijst)
               (delete-loop (cdr lijst) (cons (car lijst) reslijst)))
           (set! vloot (reverse reslijst))))
-    (delete-loop vloot '()))
-  ;(maak-aliens! aantal 0)
+    (delete-loop vloot '())
+    (if (null? vloot)
+        ((spel 'nieuw-level!))
+        'ok))
+
+
   (define (versnel! factor) ;versnelling kan ook negatief zijn
         (set! horizon-snelheid (* horizon-snelheid factor)))
  ;Zo kan dezelfde functie gebruikt worden om zowel de witte power-up te starten als de gele te stoppen
@@ -128,6 +136,6 @@
           ((eq? msg 'versnel!) versnel!)
           ((eq? msg 'stop!) stop!)
           ((eq? msg 'herstart!) herstart!)
-
+          ((eq? msg 'maak-alien-tiles!) maak-alien-tiles!)
           ))
   dispatch)

@@ -43,7 +43,7 @@
     (set-positie-x! (/ (random 1 10) 10))
     (set-positie-y! (/ (random 5 10) 10)))
 
-  (define (geraakt! kogel-adt teken-adt vloot-adt score-adt kogels-adt huidige-tijd)
+  (define (geraakt! kogel-adt teken-adt vloot-adt score-adt kogels-adt huidige-tijd spel)
     (cond
       ((eq? kleur "yellow")
        ((vloot-adt 'stop!)))

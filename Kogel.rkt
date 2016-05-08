@@ -48,26 +48,26 @@
                                 ))
 
   ;Laat de kogel na een botsing zowel inactief worden als van het scherm te verdwijnen. In verdere fase kan dan naar het type kogel gekeken worden.
-  (define (geraakt! object teken-adt vloot-adt kogels-adt score-adt huidige-tijd)
+  (define (geraakt! object teken-adt vloot-adt kogels-adt score-adt huidige-tijd spel)
     (set! staat 'inactief)
     (delete! teken-adt)
-    ((object 'geraakt!) dispatch-kogel teken-adt vloot-adt score-adt kogels-adt huidige-tijd)
+    ((object 'geraakt!) dispatch-kogel teken-adt vloot-adt score-adt kogels-adt huidige-tijd spel)
     ;((kogels-adt 'delete-inactieve-kogels))
 
     )
 
   ;Gaat na of er een botsing is.
-  (define (schietlus teken-adt vloot-adt kogels-adt score-adt power-up huidige-tijd) ;power-up
+  (define (schietlus teken-adt vloot-adt kogels-adt score-adt power-up huidige-tijd spel) ;power-up
     (define (schiet-op object)
       (if (eq? staat 'actief)
           (cond ((check-geraakt? object dispatch-kogel)
-                 (geraakt! object teken-adt vloot-adt kogels-adt score-adt huidige-tijd))
+                 (geraakt! object teken-adt vloot-adt kogels-adt score-adt huidige-tijd spel))
                  )
           'ok))
     ((vloot-adt 'loop-over-vloot) schiet-op)
     (if (eq? (power-up 'staat) 'actief)
         (cond ((check-geraakt? power-up dispatch-kogel)
-           (geraakt! power-up teken-adt vloot-adt kogels-adt score-adt huidige-tijd)))
+           (geraakt! power-up teken-adt vloot-adt kogels-adt score-adt huidige-tijd spel)))
         'ok)); Zorgt ervoor dat elke alien afgegaan wordt.
 
   ;Zorgt ervoor dat het teken-adt het object tekent.

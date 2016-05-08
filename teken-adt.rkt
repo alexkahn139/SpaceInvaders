@@ -57,21 +57,24 @@
     (set! vloot-tiles (cons (cons alien-adt kleurfoto) vloot-tiles))
     ;((alien-laag 'add-drawable) kleurfoto)
     )
-
+  (define (voeg-alien-tile-toe! alien-adt)
+    (let* ((alien-tile (neem-iets alien-adt vloot-tiles)))
+      ((alien-laag 'add-drawable) alien-tile)))
   ;;; Functie om de correcte alien of kogel uit de lijst te halen.
   (define (neem-iets iets-adt uit-tiles)
     (cdr (assoc iets-adt uit-tiles)))
 
   ;;; Functie om een alien te verwijderen. Zowel uit de lijst van de vloot-tiles als effectief van het scherm (remove-drawable)
   (define (verwijder-alien! alien-adt)
-
     ;(debug "delete-alien")
     (let* ((alien-tile (neem-iets alien-adt vloot-tiles)))
       ((alien-laag 'remove-drawable) alien-tile))
     (set! vloot-tiles (remove alien-adt vloot-tiles (lambda (r e) (eq? (car e) e)))))
   (define (reset-vloot!)
     (set! vloot-tiles '())
-    (verwijder-alle! vloot-tiles alien-laag))
+    (verwijder-alle! vloot-tiles alien-laag)
+    )
+
 
 
   ;;;;;;;;;;;;;;;;;;;;;
@@ -349,5 +352,6 @@
           ((eq? msg 'delete-power-up!) delete-power-up!)
           ((eq? msg 'verwijder-alles) verwijder-alles!)
           ((eq? msg 'reset-vloot!) reset-vloot!)
+          ((eq? msg 'voeg-alien-tile-toe!) voeg-alien-tile-toe!)
           (else (display "error, message ") (display msg) (display "not understood"))))
   dispatch-teken-adt)
