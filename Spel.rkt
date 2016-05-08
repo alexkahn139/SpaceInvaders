@@ -40,55 +40,45 @@
   (define score-adt (maak-score-adt))
   (define Power-up-adt (maak-power-up-adt (/ (random 1 10) 10) (/ (random 5 10) 10) teken-adt))
   (define level 1)
-  (define begin-aliens 6)
+  (define begin-aliens 10) ;aantal aliens die er in het 1e level moeten komen
   (define spel-tijd 0)
 
-  (define (pauze!)
-    ((menu-adt 'staat!) 'pauze)
-    ((teken-adt 'verwijder-alles))
-    ((teken-adt 'maak-rotator))
-    ((teken-adt 'set-toets-functie!) toets-naar-spel-pauze)
+  (define (pauze!) ;alles wat moet gebeuren als het spel gepauzeerd wordt
+    ((teken-adt 'verwijder-alles)) ;verwijderd het schip, de kogels en de aliens
+    ;((teken-adt 'maak-rotator))
+    ((teken-adt 'set-toets-functie!) toets-naar-spel-pauze) ;zet de correcte lussen
     ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-pauze)
-    ((rotator-adt 'teken!) teken-adt)
-    ((menu-adt 'teken!) teken-adt))
-
-  (define (restart!)
-    (pauze!)
-    ((teken-adt 'reset-vloot!))
-    ((vloot-adt 'verwijder-vloot!))
-    ((vloot-adt 'maak-aliens!) begin-aliens 0)
-    (set! level 1)
-    ;(pauze!)
-    ;((teken-adt 'delete-menu!))
+    ((rotator-adt 'teken!) teken-adt) ;tekent de rotator, een 1e keer
+    ((menu-adt 'teken!) teken-adt) ;tekent het menu, een 1e keer
     )
 
-  (define (play)
-    ((teken-adt 'herteken-alles!))
-    ((menu-adt 'staat!) 'play)
-    ((teken-adt 'delete-menu!))
-    ;((menu-adt 'delete!) teken-adt)
-    ((teken-adt 'set-toets-functie!) toets-naar-spel-play)
+  (define (restart!) ; bereidt het spel voor om te herstarten
+    (pauze!) ; zet automatisch alles op pauze
+    ((teken-adt 'reset-vloot!)) ; verwijdert de volledige vloot
+    ((vloot-adt 'verwijder-vloot!))
+    ((vloot-adt 'maak-aliens!) begin-aliens 0) ; maakt een nieuwe vloot aan
+    (set! level 1) ; zet het level terug op 1
+    )
+
+  (define (play) ; start het spel op
+    ((teken-adt 'herteken-alles!)) ;tekent de sprites terug
+    ((teken-adt 'delete-menu!)) ; verwijdert het menu en de rotator
+    ((teken-adt 'set-toets-functie!) toets-naar-spel-play) ;zet de correcte lussen
     ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-play)
     )
-  (define (howto)
-    ((menu-adt 'delete!) teken-adt)
-    ((menu-adt 'staat!) 'howto)
-    ((teken-adt 'maak-how-to))
-    ((teken-adt 'set-toets-functie!) toets-naar-spel-howto)
-    ((teken-adt 'teken-how-to!) how-to-adt)
-    ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-howto)
+
+  (define (howto) ; gaat naar het howto menu
+    ((menu-adt 'delete!) teken-adt) ;vewijdert het menu
+    ((teken-adt 'maak-how-to)) ; maakt de correcte tiles aan
+    ((teken-adt 'set-toets-functie!) toets-naar-spel-howto) ;zet de correcte lus
+    ((teken-adt 'teken-how-to!) how-to-adt) ; tekent de juiste tiles
     )
-  (define (nieuw-level!)
-    (set! level (+ level 1))
-    ((vloot-adt 'maak-aliens!) (+ begin-aliens (* level begin-aliens)) 0)
-    ;((vloot-adt 'maak-aliens!) begin-aliens 0)
-    ((vloot-adt 'maak-alien-tiles!))
-    ;((teken-adt 'herteken-alles!))
-    ;((teken-adt  'herteken-alles!))
+  (define (nieuw-level!) ; maakt een nieuw level aan
+    (set! level (+ level 1)) ;verhoogt het level
+    ((vloot-adt 'maak-aliens!) (* level begin-aliens) 0) ; maakt nieuwe en meerdere aliens aan
+    ((vloot-adt 'maak-alien-tiles!)) ;tekent de tiles voor de nieuwe aliens
     )
 
-  ;Momenteel geen tijd op een oplossing te vinden om het spel te herstarten. Waarschijnlijk gaat dit het beste door de start functie op te splitsen zodat enkel de deze opnieuwe opgeroepen kan worden.
-  ;vloot-adt 'verwijder-vloot!))
   ;spellus
   ;Leest de toetsenbordinput uit en stuurt dit door naar het spel.
   ;Afhankelijk van de staat van het spel

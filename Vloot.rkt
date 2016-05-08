@@ -28,7 +28,7 @@
   (define horizon-snelheid 0.002)
   (define vert-snelheid 0.02)
   (define afstand-tussen-2 0)
-  (define aantal-per-rij 14)
+  (define aantal-per-rij 10)
   ;maak-aliens! maakt aliens aan, deze zullen dan een positie en dergelijke hebben, met maximaal 10 per rij. en worden in een lijst opgeslagen.
   ;het teken-adt wordt ook aangesproken om daar de nieuwe alien-tiles aan te maken
   (define (maak-aliens! aantal pos-y)

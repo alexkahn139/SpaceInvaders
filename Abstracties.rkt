@@ -38,8 +38,8 @@
 (define venster-hoogte 1)
 
 ;Speelvenster in aantal pixels
-(define px-venster-hoogte 600)
-(define px-venster-breedte 600)
+(define px-venster-hoogte 420)
+(define px-venster-breedte 420)
 
 ;Grootte van een alien in pixels
 (define px-alien-hoogte 30)

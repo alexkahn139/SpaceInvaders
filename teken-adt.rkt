@@ -147,9 +147,11 @@
   ;Functie om alles weg te halen bij het aanmaken van het menu. Zorgt ervoor dat dit ook al spelende kan gebeuren.
   (define (verwijder-alles!)
     ((menu-laag 'add-drawable) menu-tile)
+    ((rotator-laag 'add-drawable) rotator-tile)
     (verwijder-alle! vloot-tiles alien-laag)
     (verwijder-alle! kogel-tiles kogel-laag)
     (verwijder-schip!)
+
 
     ) ;tekent het menu
 
