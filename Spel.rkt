@@ -40,7 +40,7 @@
   (define score-adt (maak-score-adt))
   (define Power-up-adt (maak-power-up-adt (/ (random 1 10) 10) (/ (random 5 10) 10) teken-adt))
   (define level 1)
-  (define begin-aliens 10)
+  (define begin-aliens 6)
   (define spel-tijd 0)
 
   (define (pauze!)
@@ -80,7 +80,7 @@
     )
   (define (nieuw-level!)
     (set! level (+ level 1))
-    ((vloot-adt 'maak-aliens!) (+ begin-aliens (floor (/ (* level begin-aliens) 2))) 0)
+    ((vloot-adt 'maak-aliens!) (+ begin-aliens (* level begin-aliens)) 0)
     ;((vloot-adt 'maak-aliens!) begin-aliens 0)
     ((vloot-adt 'maak-alien-tiles!))
     ;((teken-adt 'herteken-alles!))
