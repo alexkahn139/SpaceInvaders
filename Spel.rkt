@@ -125,7 +125,6 @@
              ((teken-adt 'verwijder-alles))
              ((teken-adt 'set-toets-functie!) toets-naar-spel-pauze)
              ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-pauze)))
-
           ))
 
 

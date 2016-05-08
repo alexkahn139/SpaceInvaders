@@ -287,7 +287,7 @@
   (define (teken-score! score-adt)
     (let* ((score-x (* h-pixels (score-adt 'x)))
            (score-y (* v-pixels (score-adt 'y)))
-           (string (string-append "score: "(number->string (score-adt 'score))))
+           (string (string-append "score: "(number->string (score-adt 'score)) "                   high-score: " (number->string (score-adt 'high-score))))
 
            )
       (score-tile 'clear)
