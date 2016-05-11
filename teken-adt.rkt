@@ -131,28 +131,25 @@
 
   ;Functie om het menu te verwijderen
   (define (verwijder-menu!)
-    ((rotator-laag 'remove-drawable) rotator-tile)
     ((menu-laag 'remove-drawable) menu-tile)
     (display "verwijder menu")
     )
 
+  (define (maak-menu!)
+    ((menu-laag 'add-drawable) menu-tile)
+    (display "Maak menu"))
+
   ;Functie om alles wat weggehaald wordt bij het aanmaken van een menu te hertekenen.
-  (define (herteken-alles!)
+  (define (herteken-spelelementen!)
     (maak-schip!)
-    (verwijder-menu!)
     (redraw-all! vloot-tiles alien-laag)
-    ;(verwijder-menu!)
-    (display "alles ok"))
+  )
 
   ;Functie om alles weg te halen bij het aanmaken van het menu. Zorgt ervoor dat dit ook al spelende kan gebeuren.
-  (define (verwijder-alles!)
-    ((menu-laag 'add-drawable) menu-tile)
-    ((rotator-laag 'add-drawable) rotator-tile)
+  (define (verwijder-spelelementen!)
     (verwijder-alle! vloot-tiles alien-laag)
     (verwijder-alle! kogel-tiles kogel-laag)
     (verwijder-schip!)
-
-
     ) ;tekent het menu
 
   ;;;;;;;;;;;;;;;;;;;;;;;
@@ -162,7 +159,7 @@
   ; Laag waarop de rotator getekend zal worden
   (define rotator-laag (venster 'make-layer))
   (define rotator-tile (make-bitmap-tile "rotator.jpg"))
-  (define (maak-rotator)
+  (define (maak-rotator!)
     ((rotator-laag 'add-drawable) rotator-tile))
   (define (verwijder-rotator!)
     ((rotator-laag 'remove-drawable) rotator-tile))
@@ -339,12 +336,13 @@
           ((eq? msg 'teken-score!) teken-score!)
           ((eq? msg 'teken-power-up!) teken-Power-UP!)
           ;; Delete en maak functies
-          ((eq? msg 'herteken-alles!) herteken-alles!)
+          ((eq? msg 'herteken-spelelementen!) herteken-spelelementen!)
           ((eq? msg 'nieuwe-alien!) voeg-alien-toe!)
           ((eq? msg 'nieuwe-kogel!) maak-kogel!)
-          ((eq? msg 'maak-rotator) maak-rotator)
+          ((eq? msg 'maak-rotator!) maak-rotator!)
+          ((eq? msg 'maak-menu!) maak-menu!)
           ;((eq? msg 'maak-power-up-tile) maak-power-up-tile)
-          ((eq? msg 'maak-how-to) maak-how-to)
+          ((eq? msg 'maak-how-to!) maak-how-to)
           ((eq? msg 'delete-alien!) verwijder-alien!)
           ((eq? msg 'delete-kogel!) verwijder-kogel!)
           ((eq? msg 'delete-schip!) verwijder-schip!)
@@ -352,7 +350,7 @@
           ((eq? msg 'delete-rotator!) verwijder-rotator!)
           ((eq? msg 'delete-how-to!) verwijder-how-to!)
           ((eq? msg 'delete-power-up!) delete-power-up!)
-          ((eq? msg 'verwijder-alles) verwijder-alles!)
+          ((eq? msg 'verwijder-spelelementen!) verwijder-spelelementen!)
           ((eq? msg 'reset-vloot!) reset-vloot!)
           ((eq? msg 'voeg-alien-tile-toe!) voeg-alien-tile-toe!)
           (else (display "error, message ") (display msg) (display "not understood"))))

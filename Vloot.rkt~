@@ -44,7 +44,7 @@
         (begin
           (set! afstand-tussen-2 (/ venster-breedte aantal-per-rij))
           (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal-per-rij
-                            'groen)
+           'groen)
           (maak-aliens! (- aantal aantal-per-rij) (+ pos-y 0.1)))
         (begin
           (set! afstand-tussen-2 (/ venster-breedte aantal))
@@ -65,48 +65,48 @@
                 ((alien-adt 'delete!) teken-adt))
               vloot))
 
-  (define (maak-alien-tiles!)
-    (for-each (lambda (alien-adt)
-                ((teken-adt 'voeg-alien-tile-toe!) alien-adt))
-              vloot))
+              (define (maak-alien-tiles!)
+                (for-each (lambda (alien-adt)
+                            ((teken-adt 'voeg-alien-tile-toe!) alien-adt))
+                          vloot))
   (define (verwijder-vloot!)
     (set! vloot '()))
 
   ;Zorgt voor de beweging van de aliens
   ;Gaat na of de aliens met de rand van het scherm botsen en laat ze dan terug draaien.
   (define (beweeg! spel)
-    (define laagste-alien (car vloot))
+    (define laagste-alien '())
     (define (daal!)
       (for-each (lambda (alien-adt)
                   (let ((y (alien-adt 'y)))
                     ((alien-adt 'y!) (increment y vert-snelheid))))
-                vloot))
+        vloot))
     (for-each (lambda (alien-adt)
                 (let ((y (alien-adt 'y))
                       (x (alien-adt 'x)))
-                  (when (> (alien-adt 'y) (laagste-alien 'y))
-                      (set! laagste-alien alien-adt)
+                        (if (> (alien-adt 'y) (laagste-alien 'y))
+				                    (set! laagste-alien alien-adt)
+                            'ok)
+                        (cond
+                          ((eq? richting-vloot 'links) (if  (< 0 x)
+                                                            ((alien-adt 'x!) (decrement x horizon-snelheid))
+                                                            (begin
+                                                              (set! richting-vloot 'rechts)
+                                                              (daal!)
+                                                              ((alien-adt 'x!) (increment x horizon-snelheid)))
+                                                            ))
+                          ((eq? richting-vloot 'rechts) (if (> 1 x)
+                                                            ((alien-adt 'x!) (increment x horizon-snelheid))
+                                                            (begin
+                                                              (set! richting-vloot 'links)
+                                                              (daal!)
+                                                              ((alien-adt 'x!) (increment x horizon-snelheid))))))
                       )
-                  (cond
-                    ((eq? richting-vloot 'links) (if  (< 0 x)
-                                                      ((alien-adt 'x!) (decrement x horizon-snelheid))
-                                                      (begin
-                                                        (set! richting-vloot 'rechts)
-                                                        (daal!)
-                                                        ((alien-adt 'x!) (increment x horizon-snelheid)))
-                                                      ))
-                    ((eq? richting-vloot 'rechts) (if (> 1 x)
-                                                      ((alien-adt 'x!) (increment x horizon-snelheid))
-                                                      (begin
-                                                        (set! richting-vloot 'links)
-                                                        (daal!)
-                                                        ((alien-adt 'x!) (increment x horizon-snelheid))))))
-                  )
-                )
+                      )
               vloot)
-    (if (> (laagste-alien 'y) 1)
-        ((spel 'restart!))
-        'ok))
+      (if (> (laagste-alien 'y) 1)
+          ((spel 'restart))
+          'ok))
 
   (define (delete-dode-aliens spel)
     (define (delete-loop lijst reslijst)
@@ -122,12 +122,12 @@
 
 
   (define (versnel! factor) ;versnelling kan ook negatief zijn
-    (set! horizon-snelheid (* horizon-snelheid factor)))
-  ;Zo kan dezelfde functie gebruikt worden om zowel de witte power-up te starten als de gele te stoppen
-  (define (stop!)
-    (set! horizon-snelheid 0))
-  (define (herstart!)
-    (set! horizon-snelheid 0.0005))
+        (set! horizon-snelheid (* horizon-snelheid factor)))
+ ;Zo kan dezelfde functie gebruikt worden om zowel de witte power-up te starten als de gele te stoppen
+(define (stop!)
+  (set! horizon-snelheid 0))
+(define (herstart!)
+  (set! horizon-snelheid 0.0005))
 
   ;Dispatch er met dit object geïnterageerd kan worden.
   (define (dispatch msg)

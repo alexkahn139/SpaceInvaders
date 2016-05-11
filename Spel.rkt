@@ -44,7 +44,7 @@
   (define spel-tijd 0)
 
   (define (pauze!) ;alles wat moet gebeuren als het spel gepauzeerd wordt
-    ((teken-adt 'verwijder-alles)) ;verwijderd het schip, de kogels en de aliens
+    ((menu-adt 'install!) teken-adt) ;verwijderd het schip, de kogels en de aliens
     ;((teken-adt 'maak-rotator))
     ((teken-adt 'set-toets-functie!) toets-naar-spel-pauze) ;zet de correcte lussen
     ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-pauze)
@@ -53,23 +53,24 @@
     )
 
   (define (restart!) ; bereidt het spel voor om te herstarten
+    ((vloot-adt 'verwijder-vloot!))
     (pauze!) ; zet automatisch alles op pauze
     ((teken-adt 'reset-vloot!)) ; verwijdert de volledige vloot
-    ((vloot-adt 'verwijder-vloot!))
+
     ((vloot-adt 'maak-aliens!) begin-aliens 0) ; maakt een nieuwe vloot aan
     (set! level 1) ; zet het level terug op 1
     )
 
   (define (play) ; start het spel op
-    ((teken-adt 'herteken-alles!)) ;tekent de sprites terug
-    ((teken-adt 'delete-menu!)) ; verwijdert het menu en de rotator
+    ((menu-adt 'uninstall!) teken-adt) ;tekent de sprites terug
+    ;((teken-adt 'delete-menu!)) ; verwijdert het menu en de rotator
     ((teken-adt 'set-toets-functie!) toets-naar-spel-play) ;zet de correcte lussen
     ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-play)
     )
 
   (define (howto) ; gaat naar het howto menu
-    ((menu-adt 'delete!) teken-adt) ;vewijdert het menu
-    ((teken-adt 'maak-how-to)) ; maakt de correcte tiles aan
+    ;((menu-adt 'uninstall!) teken-adt) ;vewijdert het menu
+    ((how-to-adt 'install!) teken-adt); maakt de correcte tiles aan
     ((teken-adt 'set-toets-functie!) toets-naar-spel-howto) ;zet de correcte lus
     ((teken-adt 'teken-how-to!) how-to-adt) ; tekent de juiste tiles
     )
@@ -109,10 +110,7 @@
   (define (toets-naar-spel-howto toets)
     (cond ((eq? toets #\return)
            (begin
-             ((menu-adt 'staat!) 'pauze)
-             ((teken-adt 'delete-how-to!))
-             ((teken-adt 'maak-rotator))
-             ((teken-adt 'verwijder-alles))
+             ((menu-adt 'install!) teken-adt)
              ((teken-adt 'set-toets-functie!) toets-naar-spel-pauze)
              ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-pauze)))
           ))
@@ -120,8 +118,8 @@
 
   ; Functies voor het starten van het spel
   (define (start)
-    ((teken-adt 'verwijder-alles))
-    ((teken-adt 'maak-rotator)) ;Is de selector om in het menu te kiezen wat we willen openen
+    ((menu-adt 'install!) teken-adt)
+     ;Is de selector om in het menu te kiezen wat we willen openen
     (set! spel-tijd 0)
     ((vloot-adt 'maak-aliens!) begin-aliens 0)
     ((menu-adt 'teken!) teken-adt)
