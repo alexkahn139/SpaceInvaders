@@ -132,12 +132,13 @@
   ;Functie om het menu te verwijderen
   (define (verwijder-menu!)
     ((menu-laag 'remove-drawable) menu-tile)
-    (display "verwijder menu")
+    ;(display "verwijder menu")
     )
-
+  ; tekent de menu-tile
   (define (maak-menu!)
     ((menu-laag 'add-drawable) menu-tile)
-    (display "Maak menu"))
+    ;(display "Maak menu")
+    )
 
   ;Functie om alles wat weggehaald wordt bij het aanmaken van een menu te hertekenen.
   (define (herteken-spelelementen!)
@@ -145,12 +146,13 @@
     (redraw-all! vloot-tiles alien-laag)
   )
 
-  ;Functie om alles weg te halen bij het aanmaken van het menu. Zorgt ervoor dat dit ook al spelende kan gebeuren.
+  ; dient om alle spel-elementen te verwijderen
   (define (verwijder-spelelementen!)
     (verwijder-alle! vloot-tiles alien-laag)
     (verwijder-alle! kogel-tiles kogel-laag)
     (verwijder-schip!)
-    ) ;tekent het menu
+    (delete-power-up!)
+    )
 
   ;;;;;;;;;;;;;;;;;;;;;;;
   ;;Config voor rotator;;
@@ -286,7 +288,7 @@
   (define (teken-score! score-adt)
     (let* ((score-x (* h-pixels (score-adt 'x)))
            (score-y (* v-pixels (score-adt 'y)))
-           (string (string-append "score: "(number->string (score-adt 'score)) "                   high-score: " (number->string (score-adt 'high-score))))
+           (string (string-append "score: "(number->string (score-adt 'score)) "                        high-score: " (number->string (score-adt 'high-score))))
 
            )
       (score-tile 'clear)

@@ -26,7 +26,7 @@
   (define vloot '())
   (define richting-vloot 'rechts)
   (define horizon-snelheid 0.002)
-  (define vert-snelheid 0.2)
+  (define vert-snelheid 0.02)
   (define afstand-tussen-2 0)
   (define aantal-per-rij 10)
   ;maak-aliens! maakt aliens aan, deze zullen dan een positie en dergelijke hebben, met maximaal 10 per rij. en worden in een lijst opgeslagen.
@@ -43,8 +43,7 @@
     (if (> aantal aantal-per-rij)
         (begin
           (set! afstand-tussen-2 (/ venster-breedte aantal-per-rij))
-          (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal-per-rij
-                            'groen)
+          (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal-per-rij 'groen)
           (maak-aliens! (- aantal aantal-per-rij) (+ pos-y 0.1)))
         (begin
           (set! afstand-tussen-2 (/ venster-breedte aantal))
@@ -104,7 +103,7 @@
                   )
                 )
               vloot)
-    (if (> (laagste-alien 'y) 1)
+    (if (> (laagste-alien 'y) 1) ;probleem was dat de restart in de for-each zat, bijgevolg werd het menu voor elke alien getekend
         ((spel 'restart!))
         'ok))
 
@@ -127,7 +126,7 @@
   (define (stop!)
     (set! horizon-snelheid 0))
   (define (herstart!)
-    (set! horizon-snelheid 0.0005))
+    (set! horizon-snelheid 0.002))
 
   ;Dispatch er met dit object geïnterageerd kan worden.
   (define (dispatch msg)

@@ -42,10 +42,10 @@
   (define level 1)
   (define begin-aliens 10) ;aantal aliens die er in het 1e level moeten komen
   (define spel-tijd 0)
+  (define start-positie-aliens 0.05)
 
   (define (pauze!) ;alles wat moet gebeuren als het spel gepauzeerd wordt
-    ((menu-adt 'install!) teken-adt) ;verwijderd het schip, de kogels en de aliens
-    ;((teken-adt 'maak-rotator))
+    ((menu-adt 'install!) teken-adt) ;verwijdert het schip, de kogels en de aliens en tekent het menu
     ((teken-adt 'set-toets-functie!) toets-naar-spel-pauze) ;zet de correcte lussen
     ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-pauze)
     ((rotator-adt 'teken!) teken-adt) ;tekent de rotator, een 1e keer
@@ -57,7 +57,7 @@
     (pauze!) ; zet automatisch alles op pauze
     ((teken-adt 'reset-vloot!)) ; verwijdert de volledige vloot
 
-    ((vloot-adt 'maak-aliens!) begin-aliens 0) ; maakt een nieuwe vloot aan
+    ((vloot-adt 'maak-aliens!) begin-aliens start-positie-aliens) ; maakt een nieuwe vloot aan
     (set! level 1) ; zet het level terug op 1
     )
 
@@ -76,7 +76,7 @@
     )
   (define (nieuw-level!) ; maakt een nieuw level aan
     (set! level (+ level 1)) ;verhoogt het level
-    ((vloot-adt 'maak-aliens!) (* level begin-aliens) 0) ; maakt nieuwe en meerdere aliens aan
+    ((vloot-adt 'maak-aliens!) (* level begin-aliens) start-positie-aliens) ; maakt nieuwe en meerdere aliens aan
     ((vloot-adt 'maak-alien-tiles!)) ;tekent de tiles voor de nieuwe aliens
     )
 
@@ -110,9 +110,11 @@
   (define (toets-naar-spel-howto toets)
     (cond ((eq? toets #\return)
            (begin
-             ((menu-adt 'install!) teken-adt)
+             ;((menu-adt 'install!) teken-adt)
+             ((how-to-adt 'uninstall!) teken-adt)
              ((teken-adt 'set-toets-functie!) toets-naar-spel-pauze)
-             ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-pauze)))
+             ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-pauze))
+             )
           ))
 
 
@@ -121,7 +123,7 @@
     ((menu-adt 'install!) teken-adt)
      ;Is de selector om in het menu te kiezen wat we willen openen
     (set! spel-tijd 0)
-    ((vloot-adt 'maak-aliens!) begin-aliens 0)
+    ((vloot-adt 'maak-aliens!) begin-aliens start-positie-aliens)
     ((menu-adt 'teken!) teken-adt)
     ((rotator-adt 'teken!) teken-adt))
 
@@ -154,10 +156,6 @@
     ; Input voor in het menu
     'ok
     )
-  (define (spel-lus-functie-howto delta-tijd);Input voor een extra menu
-    'ok
-    )
-
 
   ;(nu worden de adt's zoals het moet in een lus hertekend)
   ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-pauze)

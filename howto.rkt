@@ -30,7 +30,7 @@
   (define (uninstall! teken-adt)
     ((teken-adt 'delete-how-to!))
     ((teken-adt 'maak-menu!))
-    ((teken-adt 'maak-rotator))
+    ((teken-adt 'maak-rotator!))
     )
 
   (define (dispatch-how-to msg)
