@@ -75,8 +75,8 @@
     ((teken-adt 'teken-how-to!) how-to-adt) ; tekent de juiste tiles
     )
   (define (nieuw-level!) ; maakt een nieuw level aan
-    ((Power-up-adt 'delete!) teken-adt)
-    ((Power-up-adt 'reset!))
+    ;((Power-up-adt 'delete!) teken-adt)
+    ;((Power-up-adt 'reset!))
     (set! level (+ level 1)) ;verhoogt het level
     ((vloot-adt 'maak-aliens!) (* level begin-aliens) start-positie-aliens) ; maakt nieuwe en meerdere aliens aan
     ((vloot-adt 'maak-alien-tiles!)) ;tekent de tiles voor de nieuwe aliens
@@ -153,7 +153,9 @@
              (> spel-tijd (+ timer5s (Power-up-adt 'timer))))
         ((Power-up-adt 'zet-terug!) vloot-adt kogels-adt)
         'ok); met de timer zien of het groter is
-    )
+    (if (null? (vloot-adt 'vloot))
+        (nieuw-level!)
+        'ok))
   (define (spel-lus-functie-pauze delta-tijd)
     ; Input voor in het menu
     'ok

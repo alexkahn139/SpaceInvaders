@@ -39,7 +39,7 @@
     (set! random-nummer (+ random-nummer (random 5000 20000))))
   (define (reset!)
     (deactiveer!)
-    (set! id (random 1 4))
+    (set! id (random 1 4)) ;kiest een getal tussen 1 en 3
     (set-positie-x! (/ (random 1 10) 10))
     (set-positie-y! (/ (random 5 10) 10)))
 

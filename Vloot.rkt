@@ -29,6 +29,7 @@
   (define vert-snelheid 0.02)
   (define afstand-tussen-2 0)
   (define aantal-per-rij 10)
+  (define threshold 25)
   ;maak-aliens! maakt aliens aan, deze zullen dan een positie en dergelijke hebben, met maximaal 10 per rij. en worden in een lijst opgeslagen.
   ;het teken-adt wordt ook aangesproken om daar de nieuwe alien-tiles aan te maken
   (define (maak-aliens! aantal pos-y)
@@ -40,14 +41,19 @@
                     )
                   (maak-rij-aliens! (+ teller 1) (- pos-x afstand-tussen-2) pos-y aantal-op-rij kleur))
           'ok))
-    (if (> aantal aantal-per-rij)
+    (if (> aantal threshold)
         (begin
           (set! afstand-tussen-2 (/ venster-breedte aantal-per-rij))
-          (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal-per-rij 'groen)
+          (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal-per-rij 'paars)
           (maak-aliens! (- aantal aantal-per-rij) (+ pos-y 0.1)))
-        (begin
-          (set! afstand-tussen-2 (/ venster-breedte aantal))
-          (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal 'geel)))
+        (if (> aantal aantal-per-rij)
+          (begin
+            (set! afstand-tussen-2 (/ venster-breedte aantal-per-rij))
+            (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal-per-rij 'groen)
+            (maak-aliens! (- aantal aantal-per-rij) (+ pos-y 0.1)))
+          (begin
+            (set! afstand-tussen-2 (/ venster-breedte aantal))
+            (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal 'geel))))
     )
   ;Zorgt ervoor dat voor elke alien oproept om zichzelf te tekenen
   (define (teken! teken-adt)
@@ -105,7 +111,8 @@
               vloot)
     (if (> (laagste-alien 'y) 1) ;probleem was dat de restart in de for-each zat, bijgevolg werd het menu voor elke alien getekend
         ((spel 'restart!))
-        'ok))
+        'ok)
+    )
 
   (define (delete-dode-aliens spel)
     (define (delete-loop lijst reslijst)
@@ -114,14 +121,12 @@
               (delete-loop (cdr lijst) reslijst)
               (delete-loop (cdr lijst) (cons (car lijst) reslijst)))
           (set! vloot (reverse reslijst))))
-    (delete-loop vloot '())
-    (if (null? vloot)
-        ((spel 'nieuw-level!))
-        'ok))
+    (delete-loop vloot '()))
+
 
 
   (define (versnel! factor) ;versnelling kan ook negatief zijn
-    (set! horizon-snelheid (* horizon-snelheid factor)))
+    (set! vert-snelheid (* horizon-snelheid factor)))
   ;Zo kan dezelfde functie gebruikt worden om zowel de witte power-up te starten als de gele te stoppen
   (define (stop!)
     (set! horizon-snelheid 0))

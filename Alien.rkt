@@ -23,7 +23,9 @@
   (cond ((eq? kleur 'geel)
          (set! levens 1))
         ((eq? kleur 'groen)
-         (set! levens 2)))
+         (set! levens 2))
+        ((eq? kleur 'paars)
+         (set! levens 3)))
   ;Hulpfuncties
   ;Om nieuwe posities mee te geven
   (define (set-positie-x! nieuwe-x)
@@ -49,7 +51,7 @@
         (begin
          (delete! teken-adt)
          ((vloot-adt 'delete-dode-aliens) spel))
-         'ok))
+        ((vloot-adt 'delete-dode-aliens) spel)))
   (define (levens! getal)
     (set! levens getal))
 

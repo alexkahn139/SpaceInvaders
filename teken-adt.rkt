@@ -53,7 +53,9 @@
     (cond ((eq? 'geel (alien-adt 'kleur))
            (set! kleurfoto (make-bitmap-tile "monster-geel.jpg"))) ;moet met set! anders geen actie gedaan
           ((eq? 'groen (alien-adt 'kleur))
-           (set! kleurfoto (make-bitmap-tile "monster-groen.jpg"))))
+           (set! kleurfoto (make-bitmap-tile "monster-groen.jpg")))
+          ((eq? 'paars (alien-adt 'kleur))
+           (set! kleurfoto (make-bitmap-tile "monster-paars.jpg"))))
     (set! vloot-tiles (cons (cons alien-adt kleurfoto) vloot-tiles))
     ;((alien-laag 'add-drawable) kleurfoto)
     )
