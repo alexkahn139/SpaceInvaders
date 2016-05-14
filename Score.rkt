@@ -42,7 +42,6 @@
           ((eq? msg 'x) positie-x)
           ((eq? msg 'y) positie-y)
           ((eq? msg 'teken!) teken!)
-          ((eq? msg 'opslaan!) opslaan!)
           ))
   (lees-van-schijf!)
   dispatch-score)

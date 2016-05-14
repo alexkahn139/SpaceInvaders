@@ -144,6 +144,7 @@
   (define (herteken-spelelementen!)
     (maak-schip!)
     (redraw-all! vloot-tiles alien-laag)
+    ;((Power-Up-laag 'add-drawable) Power-Up-tile)
   )
 
   ; dient om alle spel-elementen te verwijderen
@@ -193,8 +194,9 @@
   ; #TODO config voor Power-Ups
   (define Power-Up-laag (venster 'make-layer))
   (define Power-Up-tile (make-tile h-pixels v-pixels))
-  ((Power-Up-laag 'add-drawable) Power-Up-tile)
-
+  ;((Power-Up-laag 'add-drawable) Power-Up-tile)
+  (define (maak-power-up!)
+    ((Power-Up-laag 'add-drawable) Power-Up-tile))
   (define (delete-power-up!)
     ((Power-Up-laag 'remove-drawable) Power-Up-tile))
   ;;;;;;;;;;;;;;;;;;
@@ -302,10 +304,10 @@
   (define (teken-Power-UP! Power-Up-adt kleur)
     (let* ((Power-Up-x (* h-pixels (Power-Up-adt 'x)))
            (Power-Up-y (* v-pixels (Power-Up-adt 'y)))
-           ;(absolute-x (centraliseer Power-Up-x 'Power-up))
+           (absolute-x (centraliseer Power-Up-x 'alien))
            )
       (Power-Up-tile 'clear)
-      ((Power-Up-tile 'draw-ellipse) Power-Up-x Power-Up-y px-alien-hoogte px-alien-breedte kleur)
+      ((Power-Up-tile 'draw-ellipse) absolute-x Power-Up-y px-alien-hoogte px-alien-breedte kleur)
       )
     )
 
@@ -343,8 +345,8 @@
           ((eq? msg 'nieuwe-kogel!) maak-kogel!)
           ((eq? msg 'maak-rotator!) maak-rotator!)
           ((eq? msg 'maak-menu!) maak-menu!)
-          ;((eq? msg 'maak-power-up-tile) maak-power-up-tile)
           ((eq? msg 'maak-how-to!) maak-how-to)
+          ((eq? msg 'maak-power-up!) maak-power-up!)
           ((eq? msg 'delete-alien!) verwijder-alien!)
           ((eq? msg 'delete-kogel!) verwijder-kogel!)
           ((eq? msg 'delete-schip!) verwijder-schip!)

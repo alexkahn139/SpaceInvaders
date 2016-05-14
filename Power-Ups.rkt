@@ -65,7 +65,7 @@
 
 (define (activeer!)
   (zoek-kleur)
-  ;((teken-adt 'maak-power-up-tile) kleur)
+  ((teken-adt 'maak-power-up!))
   (set! staat 'actief)
   ;(set! random-nummer (+ random-nummer (random 1 10000)))
 

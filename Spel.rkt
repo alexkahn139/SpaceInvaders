@@ -75,6 +75,8 @@
     ((teken-adt 'teken-how-to!) how-to-adt) ; tekent de juiste tiles
     )
   (define (nieuw-level!) ; maakt een nieuw level aan
+    ((Power-up-adt 'delete!) teken-adt)
+    ((Power-up-adt 'reset!))
     (set! level (+ level 1)) ;verhoogt het level
     ((vloot-adt 'maak-aliens!) (* level begin-aliens) start-positie-aliens) ; maakt nieuwe en meerdere aliens aan
     ((vloot-adt 'maak-alien-tiles!)) ;tekent de tiles voor de nieuwe aliens
