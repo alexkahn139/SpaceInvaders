@@ -30,12 +30,12 @@
       ;((nieuwe-kogel 'schiet!) posx teken-adt) ;Zorgt dat de kogel afgeschoten wordt
       ((teken-adt 'nieuwe-kogel!) nieuwe-kogel)
       ((teken-adt 'teken-kogel!) nieuwe-kogel)
-
+      
       ))
-
+  
   (define (loop-over-kogels functie) ;Zorgt dat functies over de kogels gemapt kunnen worden.
     (map functie kogels))
-
+  
   (define (teken! teken-adt)
     (for-each (lambda (kogel-adt)
                 ((kogel-adt 'teken!) teken-adt))

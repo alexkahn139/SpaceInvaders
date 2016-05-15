@@ -47,36 +47,36 @@
           (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal-per-rij 'paars)
           (maak-aliens! (- aantal aantal-per-rij) (+ pos-y 0.1)))
         (if (> aantal aantal-per-rij)
-          (begin
-            (set! afstand-tussen-2 (/ venster-breedte aantal-per-rij))
-            (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal-per-rij 'groen)
-            (maak-aliens! (- aantal aantal-per-rij) (+ pos-y 0.1)))
-          (begin
-            (set! afstand-tussen-2 (/ venster-breedte aantal))
-            (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal 'geel))))
+            (begin
+              (set! afstand-tussen-2 (/ venster-breedte aantal-per-rij))
+              (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal-per-rij 'groen)
+              (maak-aliens! (- aantal aantal-per-rij) (+ pos-y 0.1)))
+            (begin
+              (set! afstand-tussen-2 (/ venster-breedte aantal))
+              (maak-rij-aliens! 0 (- venster-breedte afstand-tussen-2) pos-y aantal 'geel))))
     )
   ;Zorgt ervoor dat voor elke alien oproept om zichzelf te tekenen
   (define (teken! teken-adt)
     (for-each (lambda (alien-adt)
                 ((alien-adt 'teken!) teken-adt))
               vloot))
-
+  
   ;Zorgt ervoor dat men een functie kan uitvoeren op elke alien (nodig voor de collision detection).
   (define (loop-over-vloot functie)
     (map functie vloot))
-
+  
   (define (verwijder-alle-aliens)
     (for-each (lambda (alien-adt)
                 ((alien-adt 'delete!) teken-adt))
               vloot))
-
+  
   (define (maak-alien-tiles!)
     (for-each (lambda (alien-adt)
                 ((teken-adt 'voeg-alien-tile-toe!) alien-adt))
               vloot))
   (define (verwijder-vloot!)
     (set! vloot '()))
-
+  
   ;Zorgt voor de beweging van de aliens
   ;Gaat na of de aliens met de rand van het scherm botsen en laat ze dan terug draaien.
   (define (beweeg! spel)
@@ -90,8 +90,8 @@
                 (let ((y (alien-adt 'y))
                       (x (alien-adt 'x)))
                   (when (> (alien-adt 'y) (laagste-alien 'y))
-                      (set! laagste-alien alien-adt)
-                      )
+                    (set! laagste-alien alien-adt)
+                    )
                   (cond
                     ((eq? richting-vloot 'links) (if  (< 0 x)
                                                       ((alien-adt 'x!) (decrement x horizon-snelheid))
@@ -113,7 +113,7 @@
         ((spel 'restart!))
         'ok)
     )
-
+  
   (define (delete-dode-aliens spel)
     (define (delete-loop lijst reslijst)
       (if (not (null? lijst))
@@ -122,9 +122,9 @@
               (delete-loop (cdr lijst) (cons (car lijst) reslijst)))
           (set! vloot (reverse reslijst))))
     (delete-loop vloot '()))
-
-
-
+  
+  
+  
   (define (versnel! factor) ;versnelling kan ook negatief zijn
     (set! vert-snelheid (* horizon-snelheid factor)))
   ;Zo kan dezelfde functie gebruikt worden om zowel de witte power-up te starten als de gele te stoppen
@@ -132,7 +132,7 @@
     (set! horizon-snelheid 0))
   (define (herstart!)
     (set! horizon-snelheid 0.002))
-
+  
   ;Dispatch er met dit object geïnterageerd kan worden.
   (define (dispatch msg)
     (cond ((eq? msg 'maak-aliens!) maak-aliens!)

@@ -43,7 +43,7 @@
   (define begin-aliens 10) ;aantal aliens die er in het 1e level moeten komen
   (define spel-tijd 0)
   (define start-positie-aliens 0.05)
-
+  
   (define (pauze!) ;alles wat moet gebeuren als het spel gepauzeerd wordt
     ((menu-adt 'install!) teken-adt) ;verwijdert het schip, de kogels en de aliens en tekent het menu
     ((teken-adt 'set-toets-functie!) toets-naar-spel-pauze) ;zet de correcte lussen
@@ -51,23 +51,23 @@
     ((rotator-adt 'teken!) teken-adt) ;tekent de rotator, een 1e keer
     ((menu-adt 'teken!) teken-adt) ;tekent het menu, een 1e keer
     )
-
+  
   (define (restart!) ; bereidt het spel voor om te herstarten
     ((vloot-adt 'verwijder-vloot!))
     (pauze!) ; zet automatisch alles op pauze
     ((teken-adt 'reset-vloot!)) ; verwijdert de volledige vloot
-
+    
     ((vloot-adt 'maak-aliens!) begin-aliens start-positie-aliens) ; maakt een nieuwe vloot aan
     (set! level 1) ; zet het level terug op 1
     )
-
+  
   (define (play) ; start het spel op
     ((menu-adt 'uninstall!) teken-adt) ;tekent de sprites terug
     ;((teken-adt 'delete-menu!)) ; verwijdert het menu en de rotator
     ((teken-adt 'set-toets-functie!) toets-naar-spel-play) ;zet de correcte lussen
     ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-play)
     )
-
+  
   (define (howto) ; gaat naar het howto menu
     ;((menu-adt 'uninstall!) teken-adt) ;vewijdert het menu
     ((how-to-adt 'install!) teken-adt); maakt de correcte tiles aan
@@ -81,7 +81,7 @@
     ((vloot-adt 'maak-aliens!) (* level begin-aliens) start-positie-aliens) ; maakt nieuwe en meerdere aliens aan
     ((vloot-adt 'maak-alien-tiles!)) ;tekent de tiles voor de nieuwe aliens
     )
-
+  
   ;spellus
   ;Leest de toetsenbordinput uit en stuurt dit door naar het spel.
   ;Afhankelijk van de staat van het spel
@@ -116,19 +116,19 @@
              ((how-to-adt 'uninstall!) teken-adt)
              ((teken-adt 'set-toets-functie!) toets-naar-spel-pauze)
              ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-pauze))
-             )
+           )
           ))
-
-
+  
+  
   ; Functies voor het starten van het spel
   (define (start)
     ((menu-adt 'install!) teken-adt)
-     ;Is de selector om in het menu te kiezen wat we willen openen
+    ;Is de selector om in het menu te kiezen wat we willen openen
     (set! spel-tijd 0)
     ((vloot-adt 'maak-aliens!) begin-aliens start-positie-aliens)
     ((menu-adt 'teken!) teken-adt)
     ((rotator-adt 'teken!) teken-adt))
-
+  
   ;;Schietlus, moet enkel opgeroepen worden als er geschoten is
   ;; Oproepen om het spel te laten lopen
   (define (spel-lus-functie-play delta-tijd)
@@ -160,11 +160,11 @@
     ; Input voor in het menu
     'ok
     )
-
+  
   ;(nu worden de adt's zoals het moet in een lus hertekend)
   ((teken-adt 'set-spel-lus-functie!) spel-lus-functie-pauze)
   ((teken-adt 'set-toets-functie!) toets-naar-spel-pauze)
-
+  
   ;; Dispatch functie
   (define (dispatch-spel msg)
     (cond

@@ -21,7 +21,7 @@
   (define positie-y 0.3)
   (define (teken! teken-adt)
     ((teken-adt 'teken-how-to!) dispatch-how-to))
-
+  
   (define (install! teken-adt)
     ((teken-adt 'maak-how-to!))
     ((teken-adt 'delete-menu!))
@@ -32,7 +32,7 @@
     ((teken-adt 'maak-menu!))
     ((teken-adt 'maak-rotator!))
     )
-
+  
   (define (dispatch-how-to msg)
     (cond
       ((eq? msg 'x) positie-x)

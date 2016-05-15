@@ -22,7 +22,7 @@
   (define levens 1)
   (define staat 'inactief)
   (define random-nummer (random 1 10000))
-
+  
   ;Hulpfuncties
   ;Om nieuwe posities mee te geven
   (define (set-positie-x! nieuwe-x)
@@ -42,7 +42,7 @@
     (set! id (random 1 4)) ;kiest een getal tussen 1 en 3
     (set-positie-x! (/ (random 1 10) 10))
     (set-positie-y! (/ (random 5 10) 10)))
-
+  
   (define (geraakt! kogel-adt teken-adt vloot-adt score-adt kogels-adt huidige-tijd spel)
     (cond
       ((eq? kleur "yellow")
@@ -56,33 +56,33 @@
     (delete! teken-adt)
     ;(reset!)
     ((score-adt 'verhoog! ) 5))
-(define id (random 1 4))
-(define kleur '())
-(define (zoek-kleur)
-  (cond ((= id 1) (set! kleur "yellow"))
-        ((= id 2) (set! kleur "white"))
-        ((= id 3) (set! kleur "red"))))
-
-(define (activeer!)
-  (zoek-kleur)
-  ((teken-adt 'maak-power-up!))
-  (set! staat 'actief)
-  ;(set! random-nummer (+ random-nummer (random 1 10000)))
-
-  )
-(define (deactiveer!)
-  (set! staat 'inactief))
-(define (zet-terug! vloot-adt kogels-adt)
-  (cond
-    ((eq? kleur "yellow")
-     ((vloot-adt 'herstart!)))
-    ((eq? kleur "red")
-     ((kogels-adt 'volgende-kogel!) 'normaal))
-    ((eq? kleur "white")
-     (vloot-adt 'versnel!) 0.5))
-  (reset!))
-
-
+  (define id (random 1 4))
+  (define kleur '())
+  (define (zoek-kleur)
+    (cond ((= id 1) (set! kleur "yellow"))
+          ((= id 2) (set! kleur "white"))
+          ((= id 3) (set! kleur "red"))))
+  
+  (define (activeer!)
+    (zoek-kleur)
+    ((teken-adt 'maak-power-up!))
+    (set! staat 'actief)
+    ;(set! random-nummer (+ random-nummer (random 1 10000)))
+    
+    )
+  (define (deactiveer!)
+    (set! staat 'inactief))
+  (define (zet-terug! vloot-adt kogels-adt)
+    (cond
+      ((eq? kleur "yellow")
+       ((vloot-adt 'herstart!)))
+      ((eq? kleur "red")
+       ((kogels-adt 'volgende-kogel!) 'normaal))
+      ((eq? kleur "white")
+       (vloot-adt 'versnel!) 0.5))
+    (reset!))
+  
+  
   (define (dispatch-power-up msg)
     (cond
       ((eq? msg 'x!) set-positie-x!)
@@ -102,5 +102,5 @@
       ((eq? msg 'reset!) reset!)
       ((eq? msg 'zet-terug!) zet-terug!)
       ))
-
+  
   dispatch-power-up)

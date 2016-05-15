@@ -25,28 +25,28 @@
 (define (maak-adt-teken titel h-pixels v-pixels)
   (define venster (make-window v-pixels h-pixels titel))
   ((venster 'set-background!) "black")
-
+  
   ;;;;;;;;;;
   ;;CONFIG;;
   ;;;;;;;;;;
   (define (redraw-all! lijst laag)
-  (map (lambda (pair) ;neemt een assoclijst zoals de alien-tiles
-     ((laag 'add-drawable) (cdr pair)))
-   lijst))
-(define (verwijder-alle! lijst laag)
-(map (lambda (pair) ;neemt een assoclijst zoals de alien-tiles
-   ((laag 'remove-drawable) (cdr pair)))
- lijst))
+    (map (lambda (pair) ;neemt een assoclijst zoals de alien-tiles
+           ((laag 'add-drawable) (cdr pair)))
+         lijst))
+  (define (verwijder-alle! lijst laag)
+    (map (lambda (pair) ;neemt een assoclijst zoals de alien-tiles
+           ((laag 'remove-drawable) (cdr pair)))
+         lijst))
   ;;;;;;;;;;;;;;;;;;;;;;;
   ;; Config voor alien ;;
   ;;;;;;;;;;;;;;;;;;;;;;;
-
+  
   ;;; Maakt een alien-laag aan. Hierop zullen de alien(-tiles) getekend worden.
   (define alien-laag (venster 'make-layer))
-
+  
   ;;; Beginnen met een lege lijst aan tiles, zodat we er in de globale omgeving aankunnen
   (define vloot-tiles '())
-
+  
   ;;; Functie om alien-tiles aan de vloot toe te voegen.
   (define (voeg-alien-toe! alien-adt)
     (define kleurfoto '())
@@ -65,7 +65,7 @@
   ;;; Functie om de correcte alien of kogel uit de lijst te halen.
   (define (neem-iets iets-adt uit-tiles)
     (cdr (assoc iets-adt uit-tiles)))
-
+  
   ;;; Functie om een alien te verwijderen. Zowel uit de lijst van de vloot-tiles als effectief van het scherm (remove-drawable)
   (define (verwijder-alien! alien-adt)
     ;(debug "delete-alien")
@@ -76,37 +76,37 @@
     (set! vloot-tiles '())
     (verwijder-alle! vloot-tiles alien-laag)
     )
-
-
-
+  
+  
+  
   ;;;;;;;;;;;;;;;;;;;;;
   ;;Config voor schip;;
   ;;;;;;;;;;;;;;;;;;;;;
-
+  
   ;;;De laag waarop het schip getekend zal worden
   (define schip-laag (venster 'make-layer))
-
+  
   ;;; In dit geval is er slechts een tile dus die kan hardcoded staan
   (define schip-tile (make-bitmap-tile "schip.jpg" "schip-mask.jpg"))
-
+  
   ;;; Zorgt ervoor dat het schip getekend kan worden. Moet niet te deleten zijn.
   (define (maak-schip!)
     ((schip-laag 'add-drawable) schip-tile))
-
+  
   ;verwijderen van het schip
   (define (verwijder-schip!)
     ((schip-laag 'remove-drawable) schip-tile))
-
-
+  
+  
   ;;;;;;;;;;;;;;;;;;;;;
   ;;Config voor kogel;;
   ;;;;;;;;;;;;;;;;;;;;;
   ; Laag waarop de kogel getekend zal worden
   (define kogel-laag (venster 'make-layer))
-
+  
   ; Een lege lijst voor de kogel, zo zal deze pas op het scherm komen nadat men hem nodig heeft.
   (define kogel-tiles '())
-
+  
   ; Functie die de kogel aanmaakt en in assoc lijst steekt
   (define (maak-kogel! kogel-adt)
     (define kogel-obj '())
@@ -116,21 +116,21 @@
     (set! kogel-tiles (cons (cons kogel-adt kogel-obj) kogel-tiles))
     ((kogel-laag 'add-drawable) kogel-obj)
     )
-
+  
   ; Functie om een getekende kogel te verwijderen
   (define (verwijder-kogel! kogel-adt)
     (let ((kogel-obj (neem-iets kogel-adt kogel-tiles)))
       ((kogel-laag 'remove-drawable) kogel-obj))
     (set! kogel-tiles (remove kogel-adt kogel-tiles (lambda (r e) (eq? (car e) e)))))
-
-
+  
+  
   ;;;;;;;;;;;;;;;;;;;;
   ;;Config voor menu;;
   ;;;;;;;;;;;;;;;;;;;;
   ; Laag waarop het menu getekend zal worden
   (define menu-laag (venster 'make-layer))
   (define menu-tile (make-bitmap-tile "Menu.png"))
-
+  
   ;Functie om het menu te verwijderen
   (define (verwijder-menu!)
     ((menu-laag 'remove-drawable) menu-tile)
@@ -141,14 +141,14 @@
     ((menu-laag 'add-drawable) menu-tile)
     ;(display "Maak menu")
     )
-
+  
   ;Functie om alles wat weggehaald wordt bij het aanmaken van een menu te hertekenen.
   (define (herteken-spelelementen!)
     (maak-schip!)
     (redraw-all! vloot-tiles alien-laag)
     ;((Power-Up-laag 'add-drawable) Power-Up-tile)
-  )
-
+    )
+  
   ; dient om alle spel-elementen te verwijderen
   (define (verwijder-spelelementen!)
     (verwijder-alle! vloot-tiles alien-laag)
@@ -156,11 +156,11 @@
     (verwijder-schip!)
     (delete-power-up!)
     )
-
+  
   ;;;;;;;;;;;;;;;;;;;;;;;
   ;;Config voor rotator;;
   ;;;;;;;;;;;;;;;;;;;;;;;
-
+  
   ; Laag waarop de rotator getekend zal worden
   (define rotator-laag (venster 'make-layer))
   (define rotator-tile (make-bitmap-tile "rotator.jpg"))
@@ -168,15 +168,15 @@
     ((rotator-laag 'add-drawable) rotator-tile))
   (define (verwijder-rotator!)
     ((rotator-laag 'remove-drawable) rotator-tile))
-
+  
   ;;;;;;;;;;;;;;;;;;;;;
   ;;Config voor howto;;
   ;;;;;;;;;;;;;;;;;;;;;
-
+  
   ; Laag waarop het how-to scherm getekend zal worden
   (define how-to-laag (venster 'make-layer))
   (define how-to-tile '())
-
+  
   (define (maak-how-to)
     (let ((tile (make-bitmap-tile "HowTo.jpg")))
       (set! how-to-tile tile)
@@ -187,12 +187,12 @@
   ;;;;;;;;;;;;;;;;;;;;;
   ;;Config voor score;;
   ;;;;;;;;;;;;;;;;;;;;;
-
+  
   ; Laag waarop het how-to scherm getekend zal worden
   (define score-laag (venster 'make-layer))
   (define score-tile (make-tile h-pixels v-pixels))
   ((score-laag 'add-drawable) score-tile)
-
+  
   ; #TODO config voor Power-Ups
   (define Power-Up-laag (venster 'make-layer))
   (define Power-Up-tile (make-tile h-pixels v-pixels))
@@ -204,11 +204,11 @@
   ;;;;;;;;;;;;;;;;;;
   ;;TEKEN FUNCTIES;;
   ;;;;;;;;;;;;;;;;;;
-
+  
   ;;;;;;;;;
   ;;Schip;;
   ;;;;;;;;;
-
+  
   (define (teken-schip! schip-adt)
     (let* ((schip-x (* h-pixels (schip-adt 'x)))
            (schip-y (- v-pixels px-schip-hoogte))
@@ -217,11 +217,11 @@
       ((schip-tile 'set-y!) schip-y)
       ;(debug "schip tekenen" schip-x " " schip-y)
       ))
-
+  
   ;;;;;;;;;
   ;;Alien;;
   ;;;;;;;;;
-
+  
   (define (teken-alien! alien-adt)
     (let* ((alien-x (* h-pixels (alien-adt 'x)))
            (alien-y (* v-pixels   (alien-adt 'y)))
@@ -231,11 +231,11 @@
       ((alien-tile 'set-y!) alien-y)
       ;(debug "Alien tekenen" alien-x " " alien-y)
       ))
-
+  
   ;;;;;;;;;
   ;;Kogel;;
   ;;;;;;;;;
-
+  
   (define (teken-kogel! kogel-adt)
     (let* ((kogel-x (* h-pixels (kogel-adt 'x)))
            (kogel-y (* v-pixels (kogel-adt 'y)))
@@ -245,11 +245,11 @@
       ((kogel-tile 'set-y!) kogel-y)
       ;(debug "kogel tekenen" kogel-x " " kogel-y)
       ))
-
+  
   ;;;;;;;;
   ;;Menu;;
   ;;;;;;;;
-
+  
   (define (teken-menu! menu-adt)
     (let* ((start-x (* h-pixels (menu-adt 'x)))
            (start-y (* v-pixels (menu-adt 'y)))
@@ -257,11 +257,11 @@
       ((menu-tile 'set-x!) absolute-x)
       ((menu-tile 'set-y!)  start-y)
       ))
-
+  
   ;;;;;;;;;;;
   ;;Rotator;;
   ;;;;;;;;;;;
-
+  
   (define (teken-rotator! rotator-adt)
     (let* ((rotator-x (* h-pixels (rotator-adt 'x)))
            (rotator-y (* v-pixels (rotator-adt 'y)))
@@ -269,7 +269,7 @@
       ((rotator-tile 'set-x!) absolute-x)
       ((rotator-tile 'set-y!)  rotator-y)
       ))
-
+  
   ;;;;;;;;;;
   ;;How-To;;
   ;;;;;;;;;;
@@ -284,16 +284,16 @@
             )
           )
         'ok))
-
+  
   ;;;;;;;;;
   ;;Score;;
   ;;;;;;;;;
-
+  
   (define (teken-score! score-adt)
     (let* ((score-x (* h-pixels (score-adt 'x)))
            (score-y (* v-pixels (score-adt 'y)))
            (string (string-append "score: "(number->string (score-adt 'score)) "                        high-score: " (number->string (score-adt 'high-score))))
-
+           
            )
       (score-tile 'clear)
       ((score-tile 'draw-text) string
@@ -301,7 +301,7 @@
                                score-x
                                score-y
                                "green")))
-
+  
   ;TODO Tekenfunctie voor Power-Ups
   (define (teken-Power-UP! Power-Up-adt kleur)
     (let* ((Power-Up-x (* h-pixels (Power-Up-adt 'x)))
@@ -312,23 +312,23 @@
       ((Power-Up-tile 'draw-ellipse) absolute-x Power-Up-y px-alien-hoogte px-alien-breedte kleur)
       )
     )
-
-
+  
+  
   ;;;;;;;;;;;;;;;;;;;;;
   ;; Spellus functies;;
   ;;;;;;;;;;;;;;;;;;;;;
-
+  
   (define (set-spel-lus-functie! fun)
     ((venster 'set-update-callback!) fun))
-
+  
   (define (set-toets-functie! fun)
     ((venster 'set-key-callback!) fun))
-
-
+  
+  
   ;;;;;;;;;;;;;;
   ;; Dispatch ;;
   ;;;;;;;;;;;;;;
-
+  
   (define (dispatch-teken-adt msg)
     (cond ((eq? msg 'set-toets-functie!) set-toets-functie!)
           ((eq? msg 'set-spel-lus-functie!) set-spel-lus-functie!)

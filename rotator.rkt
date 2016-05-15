@@ -21,7 +21,7 @@
   (define staat 0)
   (define positie-x 0.45) ;posities zo gekozen dat het mooi uitkwam
   (define positie-y 0.4)
-
+  
   (define (up! teken-adt) ;reageert als je met het pijltje naar boven gaat
     (if (> staat 0)
         (begin
@@ -29,7 +29,7 @@
           (set! positie-y (- positie-y 0.18))) ;zorgt dat het mooi uitkomt, is omdat het menu 1 foto is
         'ok)
     (teken! teken-adt))
-
+  
   (define (down! teken-adt)
     ;reageert als je met het pijltje naar boven gaat
     (if (< staat 2)
@@ -38,7 +38,7 @@
           (set! positie-y (+ positie-y 0.18))) ;zorgt dat het mooi uitkomt, is omdat het menu 1 foto is
         'ok)
     (teken! teken-adt))
-
+  
   ;Geeft mee aan het teken-adt om alles te tekenen
   (define (teken! teken-adt)
     ((teken-adt 'teken-rotator!) dispatch-rotator))

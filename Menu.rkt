@@ -21,19 +21,19 @@
   (define positie-x 0.60)
   (define positie-y 0.4)
   (define staat 'pauze)
-
+  
   ;geeft aan het teken-adt mee dat het menu getekend moet worden
   (define (teken! teken-adt)
     ((teken-adt 'teken-menu!) dispatch-menu))
-
+  
   ;geeft aan het teken-adt mee dat het menu gedeletet mag worden
   (define (delete! teken-adt)
     ((teken-adt 'delete-menu!)))
-
+  
   ;dient om de staat van het spel in op te slaan
   (define (staat! nieuwe-staat)
     (set! staat nieuwe-staat))
-
+  
   (define (install! teken-adt)
     ((teken-adt 'maak-rotator!))
     ((teken-adt 'maak-menu!))
@@ -44,7 +44,7 @@
     ((teken-adt 'delete-menu!))
     ((teken-adt 'herteken-spelelementen!))
     )
-
+  
   ;Dispatch functie voor interactie met het adt
   (define (dispatch-menu msg)
     (cond
