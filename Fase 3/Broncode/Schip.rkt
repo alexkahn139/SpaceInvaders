@@ -22,12 +22,12 @@
   (define positie-x 0.5)
   (define positie-y 1)
   (define snelheid 0.06)
-  
+
   ;Zorgt dat we een nieuwe positie kunnen geven aan het schip
   ;Geen set-positie-y! nodig aangezien het schip enkel op de x-as beweegt
   (define (set-positie-x! nieuwe-x)
     (set! positie-x nieuwe-x))
-  
+
   ;Het schip zal moeten bewegen op basis van invoer van het toetsenbord. Ook moet er gezien worden dat het schip niet uit het scherm kan komen
   (define (beweeg! richting)
     (cond
@@ -39,11 +39,11 @@
        (if (> 1 positie-x)
            (set-positie-x! (increment positie-x snelheid))
            positie-x))))
-  
+
   ;Zorgt ervoor dat het teken-adt het object tekent.
   (define (teken! teken-adt)
     ((teken-adt 'teken-schip!) dispatch-schip))
-  
+
   ;Dispatch er met dit object geïnterageerd kan worden.
   (define (dispatch-schip msg)
     (cond
@@ -51,5 +51,5 @@
       ((eq? msg 'x) positie-x)
       ((eq? msg 'beweeg!) beweeg!)
       ((eq? msg 'teken!) teken!)))
-  
+
   dispatch-schip)

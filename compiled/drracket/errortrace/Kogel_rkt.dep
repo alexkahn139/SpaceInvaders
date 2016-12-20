@@ -1,1 +1,0 @@
-("6.4" ("d5c821f6b5259975efe2aa3328f65a5189000b5e" . "736fca94de624141c440abe5321cfafd34d0207c") #"/Users/alexandre/Dropbox/1eBaCW/ProgrammeerProject/Fase 3/Abstracties.rkt" #"/Users/alexandre/Dropbox/1eBaCW/ProgrammeerProject/Fase 3/teken-adt.rkt" (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))
